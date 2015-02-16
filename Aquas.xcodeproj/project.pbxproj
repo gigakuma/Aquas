@@ -10,6 +10,13 @@
 		F70AB1481A91B7BA009A79AE /* Aquas.h in Headers */ = {isa = PBXBuildFile; fileRef = F70AB1471A91B7BA009A79AE /* Aquas.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F70AB14E1A91B7BA009A79AE /* Aquas.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F70AB1421A91B7BA009A79AE /* Aquas.framework */; };
 		F70AB1551A91B7BA009A79AE /* AquasTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F70AB1541A91B7BA009A79AE /* AquasTests.swift */; };
+		F70AB1611A91B800009A79AE /* AQGLObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = F70AB1601A91B800009A79AE /* AQGLObject.swift */; };
+		F70AB1631A91B81C009A79AE /* AQGLProgram.swift in Sources */ = {isa = PBXBuildFile; fileRef = F70AB1621A91B81C009A79AE /* AQGLProgram.swift */; };
+		F70AB1651A91B82C009A79AE /* AQGLSupportInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = F70AB1641A91B82C009A79AE /* AQGLSupportInfo.swift */; };
+		F70AB1671A91B841009A79AE /* AQLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = F70AB1661A91B841009A79AE /* AQLog.swift */; };
+		F70AB1691A91B869009A79AE /* AQGLRenderbuffer.swift in Sources */ = {isa = PBXBuildFile; fileRef = F70AB1681A91B869009A79AE /* AQGLRenderbuffer.swift */; };
+		F70AB16B1A91B8AD009A79AE /* AQGLFramebuffer.swift in Sources */ = {isa = PBXBuildFile; fileRef = F70AB16A1A91B8AD009A79AE /* AQGLFramebuffer.swift */; };
+		F70AB16D1A91B8BD009A79AE /* AQGLTexture2D.swift in Sources */ = {isa = PBXBuildFile; fileRef = F70AB16C1A91B8BD009A79AE /* AQGLTexture2D.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -29,6 +36,13 @@
 		F70AB14D1A91B7BA009A79AE /* AquasTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AquasTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		F70AB1531A91B7BA009A79AE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F70AB1541A91B7BA009A79AE /* AquasTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AquasTests.swift; sourceTree = "<group>"; };
+		F70AB1601A91B800009A79AE /* AQGLObject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AQGLObject.swift; sourceTree = "<group>"; };
+		F70AB1621A91B81C009A79AE /* AQGLProgram.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AQGLProgram.swift; sourceTree = "<group>"; };
+		F70AB1641A91B82C009A79AE /* AQGLSupportInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AQGLSupportInfo.swift; sourceTree = "<group>"; };
+		F70AB1661A91B841009A79AE /* AQLog.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AQLog.swift; sourceTree = "<group>"; };
+		F70AB1681A91B869009A79AE /* AQGLRenderbuffer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AQGLRenderbuffer.swift; sourceTree = "<group>"; };
+		F70AB16A1A91B8AD009A79AE /* AQGLFramebuffer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AQGLFramebuffer.swift; sourceTree = "<group>"; };
+		F70AB16C1A91B8BD009A79AE /* AQGLTexture2D.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AQGLTexture2D.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -72,6 +86,8 @@
 			isa = PBXGroup;
 			children = (
 				F70AB1471A91B7BA009A79AE /* Aquas.h */,
+				F70AB15F1A91B7D9009A79AE /* utility */,
+				F70AB15E1A91B7D4009A79AE /* opengl */,
 				F70AB1451A91B7BA009A79AE /* Supporting Files */,
 			);
 			path = Aquas;
@@ -100,6 +116,27 @@
 				F70AB1531A91B7BA009A79AE /* Info.plist */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		F70AB15E1A91B7D4009A79AE /* opengl */ = {
+			isa = PBXGroup;
+			children = (
+				F70AB1641A91B82C009A79AE /* AQGLSupportInfo.swift */,
+				F70AB1601A91B800009A79AE /* AQGLObject.swift */,
+				F70AB1621A91B81C009A79AE /* AQGLProgram.swift */,
+				F70AB1681A91B869009A79AE /* AQGLRenderbuffer.swift */,
+				F70AB16A1A91B8AD009A79AE /* AQGLFramebuffer.swift */,
+				F70AB16C1A91B8BD009A79AE /* AQGLTexture2D.swift */,
+			);
+			path = opengl;
+			sourceTree = "<group>";
+		};
+		F70AB15F1A91B7D9009A79AE /* utility */ = {
+			isa = PBXGroup;
+			children = (
+				F70AB1661A91B841009A79AE /* AQLog.swift */,
+			);
+			path = utility;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -209,6 +246,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F70AB1611A91B800009A79AE /* AQGLObject.swift in Sources */,
+				F70AB1651A91B82C009A79AE /* AQGLSupportInfo.swift in Sources */,
+				F70AB16D1A91B8BD009A79AE /* AQGLTexture2D.swift in Sources */,
+				F70AB16B1A91B8AD009A79AE /* AQGLFramebuffer.swift in Sources */,
+				F70AB1671A91B841009A79AE /* AQLog.swift in Sources */,
+				F70AB1691A91B869009A79AE /* AQGLRenderbuffer.swift in Sources */,
+				F70AB1631A91B81C009A79AE /* AQGLProgram.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -319,6 +363,7 @@
 		F70AB1591A91B7BA009A79AE /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
@@ -328,12 +373,14 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
 		};
 		F70AB15A1A91B7BA009A79AE /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;

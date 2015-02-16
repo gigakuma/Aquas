@@ -8,6 +8,7 @@
 
 import UIKit
 import XCTest
+import Aquas
 
 class AquasTests: XCTestCase {
     
@@ -23,6 +24,7 @@ class AquasTests: XCTestCase {
     
     func testExample() {
         // This is an example of a functional test case.
+        var x: AQGLTexture2D? = nil
         XCTAssert(true, "Pass")
     }
     
