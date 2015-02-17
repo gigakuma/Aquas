@@ -21,6 +21,8 @@ func nextPower2(x: CUnsignedLong) -> CUnsignedLong {
     return v + 1
 }
 
+/// The pixel format of OpenGL textures. There are two kinds of format, normal and compressed.
+/// The property 'compressed' tells you which kind the format is.
 public enum AQGLTexture2DPixelFormat {
     case Automatic
     // normal format
@@ -123,6 +125,7 @@ public enum AQGLTexture2DPixelFormat {
     }
 }
 
+/// OpenGL texture.
 public class AQGLTexture2D : AQGLObject {
     
     let width: UInt
@@ -251,9 +254,10 @@ public class AQGLTexture2D : AQGLObject {
     }
 }
 
+// extension for CGImage
 public extension AQGLTexture2D {
     
-    convenience init(image: CGImageRef, orientation: UIImageOrientation, var pixelFormat: AQGLTexture2DPixelFormat) {
+    public convenience init(image: CGImageRef, orientation: UIImageOrientation, var pixelFormat: AQGLTexture2DPixelFormat) {
         let isPOT = !AQGLSupportInfo.sharedInfo.supportNPOT
         let info = CGImageGetAlphaInfo(image)
         let hasAlpha = ((info == .PremultipliedLast) || (info == .PremultipliedFirst) || (info == .Last) || (info == .First) ? true : false);
@@ -417,58 +421,32 @@ public extension AQGLTexture2D {
         
         switch pixelFormat {
         case .RGBA5551:
-            outPixel16 = UnsafeMutablePointer<CUnsignedShort>(data)
-            for var i: UInt = 0; i < width * height; ++i, ++outPixel16 {
-                outPixel16.memory = outPixel16.memory << 1 | 0x0001
-            }
+            aq_convert_RGB565_RGBA5551(data, data, CUnsignedInt(width), CUnsignedInt(height))
             AQLog.log("Falling off fast-path converting pixel data from ARGB1555 to RGBA5551")
         case .RGB8:
             tempData = malloc(width * height * 3)
-            inPixel8 = UnsafeMutablePointer<CUnsignedChar>(data)
-            outPixel8 = UnsafeMutablePointer<CUnsignedChar>(tempData)
-            for var i: UInt = 0; i < width * height; ++i {
-                (outPixel8++).memory = (inPixel8++).memory // red
-                (outPixel8++).memory = (inPixel8++).memory // green
-                (outPixel8++).memory = (inPixel8++).memory // blue
-                inPixel8++
-            }
+            aq_convert_RGBA8_RGB8(data, tempData, CUnsignedInt(width), CUnsignedInt(width))
             free(data)
             data = tempData
             AQLog.log("Falling off fast-path converting pixel data from RGBA8888 to RGB888")
         case .RGB565:
             tempData = malloc(width * height * 2)
-            inPixel32 = UnsafeMutablePointer<CUnsignedInt>(data)
-            outPixel16 = UnsafeMutablePointer<CUnsignedShort>(tempData)
-            for var i: UInt = 0; i < width * height; ++i, ++inPixel32 {
-                (outPixel16++).memory =
-                    CUnsignedShort((((inPixel32.memory >> 0) & 0xFF) >> 3) << 11) |
-                    CUnsignedShort((((inPixel32.memory >> 8) & 0xFF) >> 2) << 5) |
-                    CUnsignedShort((((inPixel32.memory >> 16) & 0xFF) >> 3) << 0)
-            }
+            aq_convert_RGBA8_RGB565(data, tempData, CUnsignedInt(width), CUnsignedInt(height))
             free(data)
             data = tempData
             AQLog.log("Falling off fast-path converting pixel data from RGBA8888 to RGB565")
         case .RGBA4:
             tempData = malloc(width * height * 2)
-            inPixel32 = UnsafeMutablePointer<CUnsignedInt>(data)
-            outPixel16 = UnsafeMutablePointer<CUnsignedShort>(tempData)
-            for var i: UInt = 0; i < width * height; ++i, ++inPixel32 {
-                //                (outPixel16++).memory =
-                //                    CUnsignedShort(
-                //                        ((((inPixel32.memory >> 0) & 0xFF) >> 4) << 12) |
-                //                        ((((inPixel32.memory >> 8) & 0xFF) >> 4) << 8) |
-                //                        ((((inPixel32.memory >> 16) & 0xFF) >> 4) << 4) |
-                //                        ((((inPixel32.memory >> 24) & 0xFF) >> 4) << 0)
-                //                    )
-            }
+            aq_convert_RGBA8_RGBA4(data, tempData, CUnsignedInt(width), CUnsignedInt(height))
             free(data)
             data = tempData
             AQLog.log("Falling off fast-path converting pixel data from RGBA8888 to RGBA4444")
         case .LA88:
             tempData = malloc(width * height * 2)
-            
+            aq_convert_RGBA8_LA88(data, tempData, CUnsignedInt(width), CUnsignedInt(height))
             free(data)
             data = tempData
+            AQLog.log("Falling off fast-path converting pixel data from RGBA8888 to LA88")
         default:
             break
         }
@@ -478,3 +456,5 @@ public extension AQGLTexture2D {
         free(data)
     }
 }
+
+

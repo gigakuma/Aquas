@@ -16,19 +16,23 @@ public class AQGLFramebuffer: AQGLObject {
     }
     
     deinit {
-        if _glID != 0 {
-            glDeleteFramebuffers(1, &_glID)
-        }
+        self.release()
     }
     
-    func bind() {
+    public func bind() {
         if _glID != 0 {
             glBindFramebuffer(GLenum(GL_FRAMEBUFFER), _glID)
         }
     }
     
-    func attach(renderbuffer: AQGLRenderbuffer) {
-        var category: AQGLRenderFormatCategory = renderbuffer.format.category
+    public func attach(renderbuffer: AQGLRenderbuffer) {
+        var category: AQGLRenderFormatCategory = renderbuffer.formatCategory
+        if category != .None {
+            self.bind()
+            renderbuffer.bind()
+        } else {
+            return
+        }
         switch category {
         case .ColorFormat:
             glFramebufferRenderbuffer(
@@ -59,4 +63,12 @@ public class AQGLFramebuffer: AQGLObject {
             // do nothing
         }
     }
+    
+    public func release() {
+        if _glID != 0 {
+            glDeleteFramebuffers(1, &_glID)
+            _glID = 0
+        }
+    }
+    
 }

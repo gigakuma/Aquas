@@ -25,6 +25,7 @@ class AquasTests: XCTestCase {
     func testExample() {
         // This is an example of a functional test case.
         var x: AQGLTexture2D? = nil
+        var format: AQGLTexture2DPixelFormat = .RGBA8
         XCTAssert(true, "Pass")
     }
     

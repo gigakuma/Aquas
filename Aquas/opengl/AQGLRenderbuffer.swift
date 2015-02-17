@@ -33,7 +33,7 @@ public enum AQGLRenderFormat {
     case Depth24_Stencil8
     case Depth32F_Stencil8
     
-    var category: AQGLRenderFormatCategory {
+    public var category: AQGLRenderFormatCategory {
         switch self {
         case .ColorRGBA8, .ColorRGB565, .ColorRGBA4:
             return .ColorFormat
@@ -84,21 +84,38 @@ public enum AQGLRenderMultisampleMode : Int {
 }
 
 public class AQGLRenderbuffer : AQGLObject {
-    let multisampleMode: AQGLRenderMultisampleMode
-    let format: AQGLRenderFormat
-    let width: GLsizei
-    let height: GLsizei
     
-    init(format: AQGLRenderFormat, width: GLsizei, height: GLsizei, multisampleMode: AQGLRenderMultisampleMode = .None) {
+    public let formatCategory: AQGLRenderFormatCategory
+    var format: AQGLRenderFormat = .None
+    var multisampleMode: AQGLRenderMultisampleMode = .None
+    var width: GLsizei = 0
+    var height: GLsizei = 0
+    
+    public init(_ formatCategory: AQGLRenderFormatCategory) {
+        self.formatCategory = formatCategory
+        super.init()
+        // create render buffer object
+        glGenRenderbuffers(1, &_glID)
+    }
+    
+    deinit {
+        self.release()
+    }
+    
+    public func generateStorage(#format: AQGLRenderFormat, width: GLsizei, height: GLsizei, multisampleMode: AQGLRenderMultisampleMode = .None) {
+        // format and category are not match
+        if format != .None && format.category != formatCategory {
+            return
+        }
         self.format = format
         self.multisampleMode = multisampleMode
         self.width = width
         self.height = height
-        super.init()
         
-        // create render buffer object
-        glGenRenderbuffers(1, &_glID)
-        
+        // not generate with none format
+        if format == .None {
+            return
+        }
         // generate buffer
         if self.multisampleMode != .None {
             glRenderbufferStorageMultisampleAPPLE(
@@ -114,15 +131,17 @@ public class AQGLRenderbuffer : AQGLObject {
         }
     }
     
-    deinit {
-        if _glID != 0 {
-            glDeleteRenderbuffers(1, &_glID)
-        }
-    }
-    
-    func bind() {
+    public func bind() {
         if _glID != 0 {
             glBindRenderbuffer(GLenum(GL_RENDERBUFFER), _glID)
         }
     }
+    
+    public func release() {
+        if _glID != 0 {
+            glDeleteRenderbuffers(1, &_glID)
+            _glID = 0
+        }
+    }
+    
 }
