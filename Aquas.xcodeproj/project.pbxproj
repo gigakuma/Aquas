@@ -19,7 +19,11 @@
 		F70AB16D1A91B8BD009A79AE /* AQGLTexture2D.swift in Sources */ = {isa = PBXBuildFile; fileRef = F70AB16C1A91B8BD009A79AE /* AQGLTexture2D.swift */; };
 		F70AB1741A92303A009A79AE /* AQGLDataConvert.c in Sources */ = {isa = PBXBuildFile; fileRef = F70AB1721A92303A009A79AE /* AQGLDataConvert.c */; };
 		F70AB1751A92303A009A79AE /* AQGLDataConvert.h in Headers */ = {isa = PBXBuildFile; fileRef = F70AB1731A92303A009A79AE /* AQGLDataConvert.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		F70AD6961A94A76D00C3F77F /* AQTimeline.swift in Sources */ = {isa = PBXBuildFile; fileRef = F70AD6951A94A76D00C3F77F /* AQTimeline.swift */; };
+		F70AD6981A94A78900C3F77F /* AQAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = F70AD6971A94A78900C3F77F /* AQAnimation.swift */; };
 		F73AAFB01A93114B002E8F1B /* AQGLRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = F73AAFAF1A93114B002E8F1B /* AQGLRenderer.swift */; };
+		F73AAFB31A93A95B002E8F1B /* AQGLContextManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F73AAFB21A93A95B002E8F1B /* AQGLContextManager.swift */; };
+		F73AAFB51A93B4F1002E8F1B /* AQRenderLoop.swift in Sources */ = {isa = PBXBuildFile; fileRef = F73AAFB41A93B4F1002E8F1B /* AQRenderLoop.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -48,7 +52,11 @@
 		F70AB16C1A91B8BD009A79AE /* AQGLTexture2D.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AQGLTexture2D.swift; sourceTree = "<group>"; };
 		F70AB1721A92303A009A79AE /* AQGLDataConvert.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = AQGLDataConvert.c; sourceTree = "<group>"; };
 		F70AB1731A92303A009A79AE /* AQGLDataConvert.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AQGLDataConvert.h; sourceTree = "<group>"; };
+		F70AD6951A94A76D00C3F77F /* AQTimeline.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AQTimeline.swift; sourceTree = "<group>"; };
+		F70AD6971A94A78900C3F77F /* AQAnimation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AQAnimation.swift; sourceTree = "<group>"; };
 		F73AAFAF1A93114B002E8F1B /* AQGLRenderer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AQGLRenderer.swift; sourceTree = "<group>"; };
+		F73AAFB21A93A95B002E8F1B /* AQGLContextManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AQGLContextManager.swift; sourceTree = "<group>"; };
+		F73AAFB41A93B4F1002E8F1B /* AQRenderLoop.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AQRenderLoop.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -92,8 +100,9 @@
 			isa = PBXGroup;
 			children = (
 				F70AB1471A91B7BA009A79AE /* Aquas.h */,
-				F70AB15F1A91B7D9009A79AE /* utility */,
+				F73AAFB11A937379002E8F1B /* animation */,
 				F70AB15E1A91B7D4009A79AE /* opengl */,
+				F70AB15F1A91B7D9009A79AE /* utility */,
 				F70AB1451A91B7BA009A79AE /* Supporting Files */,
 			);
 			path = Aquas;
@@ -132,10 +141,11 @@
 				F70AB1621A91B81C009A79AE /* AQGLProgram.swift */,
 				F70AB1681A91B869009A79AE /* AQGLRenderbuffer.swift */,
 				F70AB16A1A91B8AD009A79AE /* AQGLFramebuffer.swift */,
+				F73AAFAF1A93114B002E8F1B /* AQGLRenderer.swift */,
 				F70AB16C1A91B8BD009A79AE /* AQGLTexture2D.swift */,
 				F70AB1721A92303A009A79AE /* AQGLDataConvert.c */,
 				F70AB1731A92303A009A79AE /* AQGLDataConvert.h */,
-				F73AAFAF1A93114B002E8F1B /* AQGLRenderer.swift */,
+				F73AAFB21A93A95B002E8F1B /* AQGLContextManager.swift */,
 			);
 			path = opengl;
 			sourceTree = "<group>";
@@ -146,6 +156,16 @@
 				F70AB1661A91B841009A79AE /* AQLog.swift */,
 			);
 			path = utility;
+			sourceTree = "<group>";
+		};
+		F73AAFB11A937379002E8F1B /* animation */ = {
+			isa = PBXGroup;
+			children = (
+				F73AAFB41A93B4F1002E8F1B /* AQRenderLoop.swift */,
+				F70AD6951A94A76D00C3F77F /* AQTimeline.swift */,
+				F70AD6971A94A78900C3F77F /* AQAnimation.swift */,
+			);
+			path = animation;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -256,12 +276,16 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F70AD6981A94A78900C3F77F /* AQAnimation.swift in Sources */,
 				F70AB1611A91B800009A79AE /* AQGLObject.swift in Sources */,
 				F70AB1651A91B82C009A79AE /* AQGLSupportInfo.swift in Sources */,
 				F70AB16D1A91B8BD009A79AE /* AQGLTexture2D.swift in Sources */,
 				F70AB16B1A91B8AD009A79AE /* AQGLFramebuffer.swift in Sources */,
 				F70AB1671A91B841009A79AE /* AQLog.swift in Sources */,
+				F73AAFB51A93B4F1002E8F1B /* AQRenderLoop.swift in Sources */,
 				F70AB1691A91B869009A79AE /* AQGLRenderbuffer.swift in Sources */,
+				F73AAFB31A93A95B002E8F1B /* AQGLContextManager.swift in Sources */,
+				F70AD6961A94A76D00C3F77F /* AQTimeline.swift in Sources */,
 				F70AB1741A92303A009A79AE /* AQGLDataConvert.c in Sources */,
 				F73AAFB01A93114B002E8F1B /* AQGLRenderer.swift in Sources */,
 				F70AB1631A91B81C009A79AE /* AQGLProgram.swift in Sources */,

@@ -18,4 +18,6 @@ void aq_convert_RGBA8_LA88(const void *input, void *output, unsigned int width, 
 
 void aq_convert_RGB565_RGBA5551(const void *input, void *output, unsigned int width, unsigned int height);
 
+void aq_convert_A8_LA88(const void *input, void *output, unsigned int width, unsigned int height);
+
 #endif /* defined(__Aquas__AQGLDataConvert__) */

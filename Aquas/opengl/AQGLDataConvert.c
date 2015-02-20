@@ -64,3 +64,12 @@ void aq_convert_RGB565_RGBA5551(const void *input, void *output, unsigned int wi
     for (int i = 0; i < width * height; ++i, ++outPixel16, ++inPixel16)
         *outPixel16 = *inPixel16 << 1 | 0x0001;
 }
+
+// convert "AAAAAAAA" to "LLLLLLLLAAAAAAAA"
+void aq_convert_A8_LA88(const void *input, void *output, unsigned int width, unsigned int height) {
+    unsigned int textureSize = width * height;
+    unsigned short *la88_data = (unsigned short *)output;
+    unsigned char  *l8_data = (unsigned char *)input;
+    for (int i = textureSize - 1; i >= 0; i--)
+        la88_data[i] = (l8_data[i] << 8) | 0xff;
+}

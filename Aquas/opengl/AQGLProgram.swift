@@ -29,13 +29,19 @@ public class AQGLProgram: AQGLObject {
     /// The name of program
     let name: String!
     
-    class func create(name: String, info: AQGLProgramInfo) -> AQGLProgram? {
+    class func create(name: String!, info: AQGLProgramInfo) -> AQGLProgram? {
+        if name == nil {
+            return nil
+        }
         var program = AQGLProgram(name, info: info)
         InternalStatic.programs[name] = program
         return program
     }
     
-    class func delete(name: String) {
+    class func delete(name: String!) {
+        if name == nil {
+            return
+        }
         var program = InternalStatic.programs[name]
         program?.release()
         InternalStatic.programs[name] = nil
@@ -48,8 +54,11 @@ public class AQGLProgram: AQGLObject {
     private var _attributes: [String : GLuint]! = [:]
     private var _uniforms: [String : GLint]! = [:]
     
-    private init(_ name: String!, info: AQGLProgramInfo!) {
+    private init?(_ name: String!, info: AQGLProgramInfo!) {
         super.init()
+        if name == nil {
+            return nil
+        }
         self.name = name
         // create program object
         _glID = glCreateProgram()
@@ -76,7 +85,7 @@ public class AQGLProgram: AQGLObject {
             }
             glDeleteProgram(_glID)
             _glID = 0
-            return
+            return nil
         }
         // attach shader objects to program object
         glAttachShader(_glID, vid)
@@ -97,7 +106,7 @@ public class AQGLProgram: AQGLObject {
             }
             // clear attributes
             _attributes.removeAll()
-            return
+            return nil
         }
         
         // detach shaders

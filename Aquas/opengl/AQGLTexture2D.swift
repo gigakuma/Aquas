@@ -141,12 +141,16 @@ public class AQGLTexture2D : AQGLObject {
         self.maxS = Float(contentSize.width) / Float(width)
         self.maxT = Float(contentSize.height) / Float(height)
         super.init()
+        // automatic format in core initializer means failure in other convenient initializers
+        if pixelFormat == .Automatic {
+            return
+        }
+        // set pixel store alignment when send data from customer memory to OpenGL internal memory
         if pixelFormat == .RGBA8 || nextPower2(width) == width && nextPower2(height) == height {
             glPixelStorei(GLenum(GL_UNPACK_ALIGNMENT), 4)
         } else {
             glPixelStorei(GLenum(GL_UNPACK_ALIGNMENT), 1)
         }
-        
         // create texture object
         glGenTextures(1, &_glID);
         // bind texture object
@@ -191,6 +195,7 @@ public class AQGLTexture2D : AQGLObject {
     }
     
     public func refresh(data: UnsafePointer<Void>, width: UInt, height: UInt, offsetX: Int, offsetY: Int) {
+        // set pixel store alignment when send data from customer memory to OpenGL internal memory
         if self.format == .RGBA8 || nextPower2(width) == width && nextPower2(height) == height {
             glPixelStorei(GLenum(GL_UNPACK_ALIGNMENT), 4)
         } else {
@@ -254,10 +259,10 @@ public class AQGLTexture2D : AQGLObject {
     }
 }
 
-// extension for CGImage
+// extension for Image
 public extension AQGLTexture2D {
     
-    public convenience init(image: CGImageRef, orientation: UIImageOrientation, var pixelFormat: AQGLTexture2DPixelFormat) {
+    public convenience init?(image: CGImageRef, orientation: UIImageOrientation, var pixelFormat: AQGLTexture2DPixelFormat) {
         let isPOT = !AQGLSupportInfo.sharedInfo.supportNPOT
         let info = CGImageGetAlphaInfo(image)
         let hasAlpha = ((info == .PremultipliedLast) || (info == .PremultipliedFirst) || (info == .Last) || (info == .First) ? true : false);
@@ -403,9 +408,9 @@ public extension AQGLTexture2D {
         
         if context == nil {
             AQLog.log("Failed creating CGBitmapContext")
-            self.init(data: data, pixelFormat: pixelFormat, width: 0, height: 0, contentSize: CGSize(width: 0,height: 0))
+            self.init(data: nil, pixelFormat: .Automatic, width: 0, height: 0, contentSize: CGSizeZero)
             free(data)
-            return
+            return nil
         }
         
         CGContextClearRect(context, CGRectMake(0, 0, CGFloat(width), CGFloat(height)))
@@ -451,10 +456,59 @@ public extension AQGLTexture2D {
             break
         }
         
-        self.init(data: data, pixelFormat: pixelFormat, width: 0, height: 0, contentSize: CGSize(width: 0,height: 0))
-        
+        self.init(data: data, pixelFormat: pixelFormat, width: width, height: height, contentSize: imageSize)
         free(data)
     }
 }
 
-
+// extension for Text
+public extension AQGLTexture2D {
+    
+    public convenience init?(string: String, font: UIFont, constraint: CGSize, insets: UIEdgeInsets, alignment:NSTextAlignment, lineBreakMode: NSLineBreakMode) {
+        var paragraphStyle = NSMutableParagraphStyle()
+        paragraphStyle.alignment = alignment
+        paragraphStyle.lineBreakMode = lineBreakMode
+        var strSize = (string as NSString).sizeWithAttributes([NSParagraphStyleAttributeName:paragraphStyle])
+        var dimensions = CGSizeMake(strSize.width + insets.left + insets.right, strSize.height + insets.top + insets.bottom)
+        self.init(string: string, font: font, dimensions: dimensions, insets: insets, paragraphStyle: paragraphStyle)
+    }
+    
+    public convenience init?(string: String, font: UIFont, dimensions: CGSize, insets: UIEdgeInsets, paragraphStyle: NSParagraphStyle) {
+        var width: UInt = UInt(dimensions.width + insets.left + insets.right)
+        var height: UInt = UInt(dimensions.height + insets.top + insets.bottom)
+        
+        if !AQGLSupportInfo.sharedInfo.supportNPOT {
+            width = nextPower2(width)
+            height = nextPower2(height)
+        }
+        
+        var colorSpace = CGColorSpaceCreateDeviceGray()
+        var data: UnsafeMutablePointer<Void> = calloc(height, width * 2)
+        let context = CGBitmapContextCreate(data, width, height, 8, width, colorSpace, .ByteOrderDefault)
+        if context == nil {
+            AQLog.log("Failed creating CGBitmapContext")
+            self.init(data: nil, pixelFormat: .Automatic, width: 0, height: 0, contentSize: CGSizeZero)
+            free(data)
+            return nil
+        }
+        
+        CGContextSetGrayFillColor(context, 1, 1)
+        CGContextTranslateCTM(context, 0, CGFloat(height))
+        // NOTE: NSString draws in UIKit referential i.e. renders upside-down compared to CGBitmapContext referential
+        CGContextScaleCTM(context, 1, -1)
+        UIGraphicsPushContext(context)
+        (string as NSString).drawWithRect(
+            CGRectMake(insets.left, insets.top, dimensions.width, dimensions.height),
+            options: .TruncatesLastVisibleLine,
+            attributes: [NSParagraphStyleAttributeName:paragraphStyle],
+            context: nil)
+        UIGraphicsPopContext()
+        
+        // LA88
+        aq_convert_A8_LA88(data, data, CUnsignedInt(width), CUnsignedInt(height))
+        
+        self.init(data: data, pixelFormat: .LA88, width: width, height: height, contentSize: dimensions)
+        free(data)
+    }
+    
+}
